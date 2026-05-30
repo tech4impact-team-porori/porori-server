@@ -10,7 +10,15 @@ insert into public.profiles (
   phone,
   village,
   address_public,
-  address_detail
+  address_detail,
+  latitude,
+  longitude,
+  personal_notes,
+  consent_info,
+  consent_voice,
+  consent_photo,
+  consent_doc_url,
+  registered_by
 )
 values
   (
@@ -21,7 +29,15 @@ values
     '010-9000-0001',
     '다로리',
     '다로리 마을회관',
-    '다로리 마을회관 사무실'
+    '다로리 마을회관 사무실',
+    36.412000,
+    127.384000,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
   ),
   (
     '00000000-0000-4000-8000-000000000002',
@@ -31,7 +47,15 @@ values
     '010-9000-0002',
     '다로리',
     '다로리 청년회',
-    '다로리 청년회 사무실'
+    '다로리 청년회 사무실',
+    36.411500,
+    127.383600,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
   ),
   (
     '00000000-0000-4000-8000-000000000101',
@@ -41,7 +65,15 @@ values
     '010-9000-0101',
     '다로리',
     '다로리 동쪽',
-    '다로리 12번지'
+    '다로리 12번지',
+    36.413200,
+    127.389100,
+    '청각이 약해 큰 목소리로 천천히 안내 필요',
+    true,
+    true,
+    true,
+    'consent-documents/seed/kim-jeomsun.pdf',
+    '00000000-0000-4000-8000-000000000001'
   ),
   (
     '00000000-0000-4000-8000-000000000102',
@@ -51,7 +83,15 @@ values
     '010-9000-0102',
     '다로리',
     '다로리 서쪽',
-    '다로리 34번지'
+    '다로리 34번지',
+    36.410400,
+    127.378900,
+    '허리가 불편해 높은 곳 작업은 청년에게만 맡김',
+    true,
+    true,
+    true,
+    'consent-documents/seed/park-malrye.pdf',
+    '00000000-0000-4000-8000-000000000001'
   ),
   (
     '00000000-0000-4000-8000-000000000103',
@@ -61,7 +101,15 @@ values
     '010-9000-0103',
     '다로리',
     '다로리 회관 근처',
-    '회관 뒤 흰 대문집'
+    '회관 뒤 흰 대문집',
+    36.412300,
+    127.384700,
+    '낯선 방문자는 운영자 이름을 먼저 확인해야 안심함',
+    true,
+    true,
+    true,
+    'consent-documents/seed/lee-sunja.pdf',
+    '00000000-0000-4000-8000-000000000001'
   ),
   (
     '00000000-0000-4000-8000-000000000104',
@@ -71,7 +119,15 @@ values
     '010-9000-0104',
     '다로리',
     '다로리 남쪽',
-    '버스정류장 옆집'
+    '버스정류장 옆집',
+    36.407900,
+    127.383700,
+    '거동이 느려 이동 동선에 여유 필요',
+    true,
+    true,
+    true,
+    'consent-documents/seed/choi-bokrye.pdf',
+    '00000000-0000-4000-8000-000000000001'
   ),
   (
     '00000000-0000-4000-8000-000000000105',
@@ -81,7 +137,15 @@ values
     '010-9000-0105',
     '다로리',
     '다로리 북쪽',
-    '감나무 밭 옆집'
+    '감나무 밭 옆집',
+    36.416000,
+    127.384100,
+    '방문 전 전화로 도착 예정 시간을 알려주면 좋음',
+    true,
+    true,
+    true,
+    'consent-documents/seed/jung-okbun.pdf',
+    '00000000-0000-4000-8000-000000000001'
   )
 on conflict (id) do update
 set role = excluded.role,
@@ -89,7 +153,15 @@ set role = excluded.role,
     phone = excluded.phone,
     village = excluded.village,
     address_public = excluded.address_public,
-    address_detail = excluded.address_detail;
+    address_detail = excluded.address_detail,
+    latitude = excluded.latitude,
+    longitude = excluded.longitude,
+    personal_notes = excluded.personal_notes,
+    consent_info = excluded.consent_info,
+    consent_voice = excluded.consent_voice,
+    consent_photo = excluded.consent_photo,
+    consent_doc_url = excluded.consent_doc_url,
+    registered_by = excluded.registered_by;
 
 insert into public.help_requests (
   id,
@@ -106,6 +178,11 @@ insert into public.help_requests (
   location_public,
   location_detail,
   credit_reward,
+  required_helpers,
+  safety_tier,
+  location_latitude,
+  location_longitude,
+  estimated_duration_minutes,
   ai_extracted_payload,
   admin_notes,
   approved_at,
@@ -126,7 +203,12 @@ values
     now() + interval '2 days',
     '다로리 동쪽',
     '다로리 12번지',
-    20,
+    48440,
+    3,
+    'needs_review',
+    36.413200,
+    127.389100,
+    120,
     '{"confirmed_by_requester": true, "confidence": 0.92}'::jsonb,
     'Seed demo pending voice request.',
     null,
@@ -146,7 +228,12 @@ values
     now() + interval '3 days',
     '다로리 서쪽',
     '다로리 34번지',
-    10,
+    18576,
+    3,
+    'tier_3',
+    36.410400,
+    127.378900,
+    60,
     null,
     'Seed demo published request.',
     now() - interval '2 hours',
@@ -166,7 +253,12 @@ values
     now() + interval '1 day',
     '다로리 회관 근처',
     '회관 뒤 흰 대문집',
-    15,
+    23220,
+    3,
+    'tier_3',
+    36.412300,
+    127.384700,
+    90,
     null,
     'Seed demo accepted request.',
     now() - interval '4 hours',
@@ -186,7 +278,12 @@ values
     now() - interval '1 day',
     '다로리 남쪽',
     '버스정류장 옆집',
-    25,
+    37152,
+    3,
+    'tier_3',
+    36.407900,
+    127.383700,
+    120,
     null,
     'Seed demo completion waiting for admin confirmation.',
     now() - interval '2 days',
@@ -206,7 +303,12 @@ values
     now() - interval '3 days',
     '다로리 북쪽',
     '감나무 밭 옆집',
-    10,
+    15480,
+    3,
+    'tier_3',
+    36.416000,
+    127.384100,
+    60,
     null,
     'Seed demo credited request.',
     now() - interval '5 days',
@@ -220,6 +322,11 @@ set status = excluded.status,
     location_public = excluded.location_public,
     location_detail = excluded.location_detail,
     credit_reward = excluded.credit_reward,
+    required_helpers = excluded.required_helpers,
+    safety_tier = excluded.safety_tier,
+    location_latitude = excluded.location_latitude,
+    location_longitude = excluded.location_longitude,
+    estimated_duration_minutes = excluded.estimated_duration_minutes,
     admin_notes = excluded.admin_notes,
     approved_at = excluded.approved_at,
     published_at = excluded.published_at;
@@ -229,15 +336,26 @@ insert into public.assignments (
   help_request_id,
   helper_id,
   status,
+  applied_at,
   accepted_at,
   completed_at
 )
 values
   (
+    '00000000-0000-4000-8000-000000002002',
+    '00000000-0000-4000-8000-000000001002',
+    '00000000-0000-4000-8000-000000000002',
+    'applied',
+    now() - interval '30 minutes',
+    null,
+    null
+  ),
+  (
     '00000000-0000-4000-8000-000000002003',
     '00000000-0000-4000-8000-000000001003',
     '00000000-0000-4000-8000-000000000002',
     'accepted',
+    now() - interval '3 hours',
     now() - interval '3 hours',
     null
   ),
@@ -247,6 +365,7 @@ values
     '00000000-0000-4000-8000-000000000002',
     'completed_submitted',
     now() - interval '2 days',
+    now() - interval '2 days',
     now() - interval '1 hour'
   ),
   (
@@ -255,10 +374,12 @@ values
     '00000000-0000-4000-8000-000000000002',
     'confirmed',
     now() - interval '5 days',
+    now() - interval '5 days',
     now() - interval '4 days'
   )
 on conflict (id) do update
 set status = excluded.status,
+    applied_at = excluded.applied_at,
     accepted_at = excluded.accepted_at,
     completed_at = excluded.completed_at;
 
@@ -302,15 +423,25 @@ insert into public.credit_ledger (
   created_by,
   created_at
 )
-values (
-  '00000000-0000-4000-8000-000000004005',
-  '00000000-0000-4000-8000-000000000002',
-  '00000000-0000-4000-8000-000000002005',
-  10,
-  'task_completion',
-  '00000000-0000-4000-8000-000000000001',
-  now() - interval '4 days'
-)
+values
+  (
+    '00000000-0000-4000-8000-000000004005',
+    '00000000-0000-4000-8000-000000000002',
+    '00000000-0000-4000-8000-000000002005',
+    15480,
+    'task_completion',
+    '00000000-0000-4000-8000-000000000001',
+    now() - interval '4 days'
+  ),
+  (
+    '00000000-0000-4000-8000-000000004006',
+    '00000000-0000-4000-8000-000000000002',
+    '00000000-0000-4000-8000-000000002005',
+    10,
+    'review_bonus',
+    '00000000-0000-4000-8000-000000000001',
+    now() - interval '4 days'
+  )
 on conflict (id) do update
 set amount = excluded.amount,
     reason = excluded.reason,
